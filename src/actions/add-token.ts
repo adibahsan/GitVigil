@@ -1,6 +1,7 @@
 "use server";
 import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
+import { redis } from "@/lib/redis";
 import { encryptToken } from "@/lib/token-encryption";
 import { revalidatePath } from "next/cache";
 
@@ -8,6 +9,8 @@ type ActionResult = {
     success: boolean;
     message: string;
 };
+
+const TOKEN_EXPIRATION = 3600; // 1 hour in seconds
 
 export async function upsertGithubToken(token: string): Promise<ActionResult> {
     const session = await auth();
@@ -24,6 +27,11 @@ export async function upsertGithubToken(token: string): Promise<ActionResult> {
                 id: session.user.id,
                 accessToken: encryptedToken,
             },
+        });
+
+        const cacheKey = `git-token:${session.user.id}`;
+        await redis.set(cacheKey, encryptedToken, {
+            ex: TOKEN_EXPIRATION,
         });
         revalidatePath("/dashboard");
         return { success: true, message: "GitHub token updated successfully" };

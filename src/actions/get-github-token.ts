@@ -16,9 +16,7 @@ export async function getGitHubToken(): Promise<string> {
 
         const cacheKey = `git-token:${session.user.id}`;
 
-        // console.time("Redis Query Time");
         const cachedToken = await redis.get<string>(cacheKey);
-        // console.timeEnd("Redis Query Time");
 
         if (cachedToken) {
             return cachedToken;
@@ -38,11 +36,9 @@ export async function getGitHubToken(): Promise<string> {
             return "NO_TOKEN";
         }
 
-        // console.time("Redis Set Time");
         await redis.set(cacheKey, user.accessToken, {
             ex: TOKEN_EXPIRATION,
         });
-        // console.timeEnd("Redis Set Time");
 
         return user.accessToken;
     } catch (error) {
