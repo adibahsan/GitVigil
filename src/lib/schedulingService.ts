@@ -23,28 +23,27 @@ export async function checkAndRunScheduledCommits() {
 
     try {
         const schedules = await prisma.commitSchedule.findMany();
-        console.log(schedules);
-        console.log(`Found ${schedules.length} schedules`);
+        // console.log(`Found ${schedules.length} schedules`);
 
         for (const schedule of schedules) {
-            console.log(
-                `Checking schedule for user ${schedule.userId}:`,
-                schedule
-            );
+            // console.log(
+            //     `Checking schedule for user ${schedule.userId}:`,
+            //     schedule
+            // );
 
             try {
                 const shouldRun = shouldRunCommit(schedule, now);
-                console.log(
-                    `Should run commit for user ${schedule.userId}:`,
-                    shouldRun
-                );
+                // console.log(
+                //     `Should run commit for user ${schedule.userId}:`,
+                //     shouldRun
+                // );
 
                 if (shouldRun) {
-                    console.log(
-                        `Attempting to run commit for user ${schedule.userId}`
-                    );
+                    // console.log(
+                    //     `Attempting to run commit for user ${schedule.userId}`
+                    // );
                     await createGitStreakRepo(schedule.userId);
-                    console.log(`Commit completed for user ${schedule.userId}`);
+                    // console.log(`Commit completed for user ${schedule.userId}`);
                 }
             } catch (error) {
                 console.error(
