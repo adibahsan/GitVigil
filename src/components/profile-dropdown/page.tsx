@@ -16,8 +16,6 @@ export default function ProfileDropDown() {
     const session = useSession()
     const [isCommitModalOpen, setIsCommitModalOpen] = useState(false)
 
-    console.log(session.data?.user)
-
     return (
         <>
             {session.data?.user ? (
