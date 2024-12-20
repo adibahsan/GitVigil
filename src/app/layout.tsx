@@ -10,11 +10,9 @@ import QueryProvider from "@/providers/QueryProvider";
 import SessionProvider from "@/providers/SessionProvider";
 import NextTopLoader from 'nextjs-toploader';
 import { Analytics } from "@vercel/analytics/react"
+import { GeistSans } from "geist/font/sans";
 
-const fontSans = FontSans({
-  subsets: ["latin"],
-  variable: "--font-sans",
-})
+
 export const metadata: Metadata = {
   title: "GitVigil",
   description: "An open-source tool to help developers maintain their GitHub contribution streaks effortlessly.",
@@ -36,7 +34,7 @@ export default function RootLayout({
       <body
         className={cn(
           "min-h-screen grid grid-rows-[auto_1fr_auto] bg-background font-sans antialiased",
-          fontSans.variable
+          `${GeistSans.variable}`
         )}
       >
         <ThemeProvider
