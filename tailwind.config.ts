@@ -89,7 +89,9 @@ const config = {
             },
             fontFamily: {
                 montserrat: ["var(--font-montserrat)", "sans-serif"],
+                sans: ['var(--font-geist-sans)'],
             },
+            
         },
     },
     plugins: [require("tailwindcss-animate")],
