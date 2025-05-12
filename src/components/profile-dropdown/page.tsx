@@ -55,11 +55,11 @@ export default function ProfileDropDown() {
                     </DropdownMenu>
 
 
-                    {/* <EditScheduledCommit
+                    <EditScheduledCommit
                         isCommitModalOpen={isCommitModalOpen}
                         setIsCommitModalOpen={setIsCommitModalOpen}
                         userId={session.data.user.id}
-                    /> */}
+                    />
                 </>
             ) : null}
         </>
