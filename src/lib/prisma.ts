@@ -4,10 +4,6 @@ import { Pool } from "@neondatabase/serverless";
 
 const connectionString = process.env.POSTGRES_PRISMA_URL;
 
-if (!connectionString) {
-    throw new Error("POSTGRES_PRISMA_URL is not set");
-}
-
 const globalForPrisma = globalThis as unknown as {
     prisma: PrismaClient | undefined;
     pool: Pool | undefined;
