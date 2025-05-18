@@ -6,6 +6,18 @@ import { decryptToken } from "@/lib/token-encryption";
 
 async function fetchCommitsForRepo(octokit: Octokit, owner: string, repo: string, since: string) {
   try {
+    // Check if repository exists and is accessible first
+    try {
+      await octokit.repos.get({
+        owner,
+        repo
+      });
+    } catch (repoError) {
+      // Repository doesn't exist or is inaccessible, skip it silently
+      console.log(`Repository ${owner}/${repo} is not accessible, skipping`);
+      return [];
+    }
+    
     const commits = await octokit.paginate(octokit.repos.listCommits, {
       owner,
       repo,
@@ -26,6 +38,7 @@ async function fetchCommitsForRepo(octokit: Octokit, owner: string, repo: string
     }));
   } catch (error) {
     console.error(`Error fetching commits for ${repo}:`, error);
+    // Return empty array to prevent breaking the Promise.all
     return [];
   }
 }
@@ -43,6 +56,7 @@ async function fetchTodayCommits(octokit: Octokit) {
   );
 
   const allCommits = await Promise.all(commitPromises);
+  console.log("All Commits:", allCommits.flat(), allCommits.flat().length);
   return allCommits.flat();
 }
 

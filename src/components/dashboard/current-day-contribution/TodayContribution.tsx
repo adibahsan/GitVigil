@@ -6,60 +6,87 @@ import { CircleCheckBig, CircleX, Star } from "lucide-react";
 import Link from "next/link";
 
 const TodayContribution = async () => {
-    const data = await getCurrentDayCommitData();
-
-    return (
-        <>
-            {data.totalCommits !== 0 ? (
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="flex gap-2 items-center text-3xl font-semibold">
-                            <CircleCheckBig color="#22c55e" />
-                            Today&#39;s Contribution Status
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <p className="text-3xl font-semibold">
-                            You&#39;ve made <span className="text-[#22c55e] font-bold">{data.totalCommits}</span> contribution
-                            {data.totalCommits > 1 ? "s" : ""} today!
-                        </p>
-                    </CardContent>
-                    <CardFooter className="flex gap-4">
-                        <MaintainStreakButton />
-                        <Button variant="outline" size={"lg"} className='gap-2 flex md:hidden' asChild>
-                            <Link href={"https://github.com/kartikmalik0/GitVigil.git"} target="_blank">
-                                <Star />
-                                Star on Github
-                            </Link>
-                        </Button>
-                    </CardFooter>
-                </Card>
-            ) : (
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="flex gap-2 items-center">
-                            <CircleX color="#eab308" />
-                            No Today&#39;s Contribution Status
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <p className="text-xl text-subHeading">
-                            No contributions detected today. Use the button below to maintain your streak!
-                        </p>
-                    </CardContent>
-                    <CardFooter className=" flex gap-4 items-center">
-                        <MaintainStreakButton />
-                        <Button variant="outline" size={"lg"} className='gap-2 flex md:hidden' asChild>
-                            <Link href={"https://github.com/kartikmalik0/GitVigil.git"} target="_blank">
-                                <Star />
-                                Star on Github
-                            </Link>
-                        </Button>
-                    </CardFooter>
-                </Card>
-            )}
-        </>
-    );
+    try {
+        const data = await getCurrentDayCommitData();
+        return (
+            <>
+                {data.totalCommits !== 0 ? (
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex gap-2 items-center text-3xl font-semibold">
+                                <CircleCheckBig color="#22c55e" />
+                                Today&#39;s Contribution Status
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <p className="text-3xl font-semibold">
+                                You&#39;ve made <span className="text-[#22c55e] font-bold">{data.totalCommits}</span> contribution
+                                {data.totalCommits > 1 ? "s" : ""} today!
+                            </p>
+                        </CardContent>
+                        <CardFooter className="flex gap-4">
+                            <MaintainStreakButton />
+                            <Button variant="outline" size={"lg"} className='gap-2 flex md:hidden' asChild>
+                                <Link href={"https://github.com/kartikmalik0/GitVigil.git"} target="_blank">
+                                    <Star />
+                                    Star on Github
+                                </Link>
+                            </Button>
+                        </CardFooter>
+                    </Card>
+                ) : (
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex gap-2 items-center">
+                                <CircleX color="#eab308" />
+                                No Today&#39;s Contribution Status
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <p className="text-xl text-subHeading">
+                                No contributions detected today. Use the button below to maintain your streak!
+                            </p>
+                        </CardContent>
+                        <CardFooter className=" flex gap-4 items-center">
+                            <MaintainStreakButton />
+                            <Button variant="outline" size={"lg"} className='gap-2 flex md:hidden' asChild>
+                                <Link href={"https://github.com/kartikmalik0/GitVigil.git"} target="_blank">
+                                    <Star />
+                                    Star on Github
+                                </Link>
+                            </Button>
+                        </CardFooter>
+                    </Card>
+                )}
+            </>
+        );
+    } catch (error) {
+        console.error("Error in TodayContribution component:", error);
+        // Fallback UI when there's an error fetching commit data
+        return (
+            <Card>
+                <CardHeader>
+                    <CardTitle className="flex gap-2 items-center">
+                        <CircleX color="#ef4444" />
+                        Unable to Fetch Contribution Data
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-xl text-subHeading">
+                        We encountered an issue while fetching your contribution data. This could be due to GitHub API limits or connectivity issues.
+                    </p>
+                </CardContent>
+                <CardFooter className="flex gap-4 items-center">
+                    <MaintainStreakButton />
+                    <Button variant="outline" size={"lg"} className='gap-2' asChild>
+                        <Link href="/dashboard" prefetch={false}>
+                            Try Again
+                        </Link>
+                    </Button>
+                </CardFooter>
+            </Card>
+        );
+    }
 };
 
 export default TodayContribution;
